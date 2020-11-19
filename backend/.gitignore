@@ -1,0 +1,6 @@
+# Packages installed
+/node_modules
+
+# File with environment variables
+# You can set your own variables by creating a nodemon.json file in the backend root folder
+nodemon.json
