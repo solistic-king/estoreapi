@@ -30,4 +30,3 @@ mongoose.connect(MONGODB_URI,{ useNewUrlParser: true}).then(result => {
 }).catch(err => {
     console.log(err);
 });
-//test
