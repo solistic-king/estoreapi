@@ -26,7 +26,7 @@ app.use((error, req, res, next) => {
 const MONGODB_URI = `mongodb+srv://varun:varunmadhu6@testcluster.n5fgm.mongodb.net/estore`
 
 mongoose.connect(MONGODB_URI).then(result => {
-    app.listen(process.env.PORT || 3000);
+    app.listen(process.env.PORT || 3000;
 }).catch(err => {
     console.log(err);
 });
