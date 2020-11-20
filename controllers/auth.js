@@ -54,7 +54,7 @@ exports.login = async (req, res, next) => {
         const token = jwt.sign({
             email: user.email,
             userId: user._id.toString(),
-        }, 'dTnKdYABMtZ50odmwSbRc53EWHO6RAmQZntSTOBsG-vLzAqgqimYrEYPqT07Kv0A', { expiresIn: '1h' });
+        }, process.env.SECRET_KEY , { expiresIn: '1h' });
         res.status(200).json({ token: token, userId: user._id.toString(), isAdmin: user.isAdmin });
     } catch (error) {
         handleError(error, next);
