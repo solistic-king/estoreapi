@@ -23,7 +23,7 @@ app.use((error, req, res, next) => {
     res.status(statusCode).json({ message: message, data: data });
 });
 
-const MONGODB_URI = `mongodb://localhost:27017/testappu?readPreference=primary&appname=MongoDB%20Compass&ssl=false`
+const MONGODB_URI = `mongodb+srv://varun:varunmadhu6@testcluster.n5fgm.mongodb.net/test`
 
 mongoose.connect(MONGODB_URI).then(result => {
     app.listen(process.env.PORT || 3000);
