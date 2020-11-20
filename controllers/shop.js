@@ -1,4 +1,5 @@
 const Product = require('../models/product');
+const handleError = require('../util/handleError');
 
 exports.getProducts = async (req, res, next) => {
     try {
@@ -87,11 +88,4 @@ exports.deleteProduct = async (req, res, next) => {
     }
 
     // TODO: pass user id on request to remove product from user's cart
-}
-
-const handleError = (error, next) => {
-    if(!error.statusCode) {
-        error.statusCode = 500;
-    }
-    next(error);
 }

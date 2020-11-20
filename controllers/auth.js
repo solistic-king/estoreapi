@@ -1,6 +1,7 @@
 const User = require('../models/user');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const handleError = require('../util/handleError');
 
 exports.signup = async (req, res, next) => {
     const name = req.body.name;
@@ -44,7 +45,7 @@ exports.login = async (req, res, next) => {
             throw error;
         }
 
-        const isEqual = bcrypt.compare(password, user.password);
+        const isEqual = await bcrypt.compare(password, user.password);
         if (!isEqual) {
             const error = new Error("Email and/or password are wrong.");
             error.statusCode = 404;
@@ -60,10 +61,3 @@ exports.login = async (req, res, next) => {
         handleError(error, next);
     }
 };
-
-const handleError = (error, next) => {
-    if(!error.statusCode) {
-        error.statusCode = 500;
-    }
-    next(error);
-}
