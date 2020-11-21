@@ -1,7 +1,9 @@
 const User = require('../models/user');
+
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const handleError = require('../util/handleError');
+
+const handleError = require('../middleware/errorHandler').default;
 
 exports.signup = async (req, res, next) => {
     const name = req.body.name;

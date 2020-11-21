@@ -8,6 +8,8 @@ const bodyParser = require('body-parser');
 
 const authRoutes = require('./routes/auth');
 const shopRoutes = require('./routes/shop');
+const categoryRoutes = require('./routes/category');
+const ratingRoutes = require('./routes/rating');
 
 const app = express();
 
@@ -27,6 +29,8 @@ app.use(expressWinston.logger({
 
 app.use('/auth', authRoutes);
 app.use('', shopRoutes);
+app.use('', categoryRoutes);
+app.use('', ratingRoutes);
 
 app.use(expressWinston.errorLogger({
     transports: [

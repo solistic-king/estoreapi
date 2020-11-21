@@ -17,6 +17,14 @@ const productSchema = new Schema({
     description: {
         type: String,
         required: true
+    },
+    categories : [{
+        type: Schema.Types.ObjectId,
+        ref : "category"
+    }],
+    rating: {
+        current: { type: Number, default: 0 },
+        numOfRatings : { type: Number, default: 0 }
     }
 });
 

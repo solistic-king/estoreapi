@@ -1,5 +1,5 @@
 const User = require('../models/user');
-const handleError = require('../util/handleError');
+const handleError = require('../middleware/errorHandler').default;
 
 exports.me = async (req, res, next) => {
     const userId = req.userId;

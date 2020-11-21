@@ -1,9 +1,10 @@
 const Product = require('../models/product');
-const handleError = require('../util/handleError');
+
+const handleError = require('../middleware/errorHandler').default;
 
 exports.getProducts = async (req, res, next) => {
     try {
-        const products = await Product.find();
+        const products = await Product.find().populate('categories');
         res.status(200).json({ products: products });
     } catch (error) {
         handleError(error, next);
@@ -14,7 +15,7 @@ exports.getProduct = async (req, res, next) => {
     const productId = req.params.productId;
     console.log(productId);
     try {
-        const product = await Product.findById(productId);
+        const product = await Product.findById(productId).populate('categories');
         if (!product) {
             const error = new Error('Could not find product.');
             error.statusCode = 404;
@@ -32,13 +33,15 @@ exports.createProduct = async (req, res, next) => {
     const price = req.body.price;
     const imageUrl = req.body.imageUrl;
     const description = req.body.description;
+    const categories = req.body.categories;
 
     try {
         const product = new Product({
             title: title,
             price: price,
             imageUrl: imageUrl,
-            description: description
+            description: description,
+            categories
         });
         await product.save();
         res.status(201).json({ message: 'Product created.' });
