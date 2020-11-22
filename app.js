@@ -19,7 +19,7 @@ app.use(bodyParser.json());
 
 app.use(cors());
 
-app.use('/api', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+app.use('/api/doc', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.use(expressWinston.logger({
     transports: [
