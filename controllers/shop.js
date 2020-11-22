@@ -50,45 +50,45 @@ exports.createProduct = async (req, res, next) => {
     }
 }
 
-exports.updateProduct = async (req, res, next) => {
-    const productId = req.params.productId;
-    const title = req.body.title;
-    const price = req.body.price;
-    const imageUrl = req.body.imageUrl;
-    const description = req.body.description;
+// exports.updateProduct = async (req, res, next) => {
+//     const productId = req.params.productId;
+//     const title = req.body.title;
+//     const price = req.body.price;
+//     const imageUrl = req.body.imageUrl;
+//     const description = req.body.description;
 
-    try {
-        const product = await Product.findById(productId);
-        if (!product) {
-            const error = new Error('Could not find product.');
-            error.statusCode = 404;
-            throw error;
-        }
-        product.title = title;
-        product.price = price;
-        product.imageUrl = imageUrl;
-        product.description = description;
-        await product.save();
-        res.status(200).json({ message: 'Product updated.' });
-    } catch (error) {
-        handleError(error, next);
-    }
-}
+//     try {
+//           const product = await Product.findById(productId);
+//         if (!product) {
+//             const error = new Error('Could not find product.');
+//             error.statusCode = 404;
+//             throw error;
+//         }
+//         product.title = title;
+//         product.price = price;
+//         product.imageUrl = imageUrl;
+//         product.description = description;
+//         await product.save();
+//         res.status(200).json({ message: 'Product updated.' });
+//     } catch (error) {
+//         handleError(error, next);
+//     }
+// }
 
-exports.deleteProduct = async (req, res, next) => {
-    const productId = req.params.productId  
-    try {
-        const post = await Product.findById(productId);
-        if (!post) {
-            const error = new Error('Could not find product.');
-            error.statusCode = 404;
-            throw error;
-        }
-        await Product.findByIdAndRemove(productId);
-        res.status(200).json({ message: 'Product deleted.' })
-    } catch (error) {
-        handleError(error, next);
-    }
+// exports.deleteProduct = async (req, res, next) => {
+//     const productId = req.params.productId  
+//     try {
+//         const post = await Product.findById(productId);
+//         if (!post) {
+//             const error = new Error('Could not find product.');
+//             error.statusCode = 404;
+//             throw error;
+//         }
+//         await Product.findByIdAndRemove(productId);
+//         res.status(200).json({ message: 'Product deleted.' })
+//     } catch (error) {
+//         handleError(error, next);
+//     }
 
-    // TODO: pass user id on request to remove product from user's cart
-}
+//     // TODO: pass user id on request to remove product from user's cart
+// }

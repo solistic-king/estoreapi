@@ -12,9 +12,9 @@ router.post('/products', isAuth,  shopController.createProduct);
 
 router.get('/product/:productId', shopController.getProduct);
 
-router.put('/product/:productId', isAuth, shopController.updateProduct);
+// router.put('/product/:productId', isAuth, shopController.updateProduct);
 
-router.delete('/product/:productId', isAuth, shopController.deleteProduct);
+// router.delete('/product/:productId', isAuth, shopController.deleteProduct);
 
 router.get('/me', isAuth, userController.me);
 
