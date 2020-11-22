@@ -19,6 +19,198 @@
     ],
     
     "paths": {
+        "/auth/signup": {
+            "put": {
+                "tags": ["Auth"],
+                "summary": "To resigter a new user",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "name": {
+                                        "type": "string"
+                                    },
+                                    "email":{
+                                        "type":"string"
+                                    },
+                                    "password": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Success message",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        },
+                                        "userId": {
+                                            "type": "string"
+                                        }
+                                    }
+                                },
+                                "example": {
+                                    "message": "User was created.",
+                                    "userId": "5fbad850b3d3f3cc049ddb69"
+                                }
+                            }
+                        }
+                    },
+                    "409": {
+                        "description": "Conflict message",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    }
+                                },
+                                "example": {
+                                    "message": "User already exists."
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/login": {
+            "post": {
+                "tags": ["Auth"],
+                "summary": "To perform login",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "email":{
+                                        "type":"string"
+                                    },
+                                    "password": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Login success message",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "token": {
+                                            "type": "string"
+                                        },
+                                        "userId": {
+                                            "type": "string"
+                                        },
+                                        "isAdmin": {
+                                            "type": "boolean"
+                                        }
+                                    }
+                                },
+                                "example": {
+                                    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InN0cmluZyIsInVzZXJJZCI6IjVmYmFkODUwYjNkM2YzY2MwNDlkZGI2OSIsImlhdCI6MTYwNjA4MDc4NywiZXhwIjoxNjA2MDg0Mzg3fQ.Q0k3NdbqU99xbK7AE8JcghSNvNbqRDsoxzOEdynM8zM",
+                                    "userId": "5fbad850b3d3f3cc049ddb69",
+                                    "isAdmin": false
+                                  }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Incorrect email/password response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    }
+                                },
+                                "example": {
+                                    "message": "Email and/or password are wrong."
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+
+        "/me":{
+            "get": {
+                "tags": ["User"],
+                "summary": "To fetch details of logged in user",
+                "security": [
+                    {
+                       "bearerAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success Message",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        },
+                                        "user": {
+                                            "type": "object"
+                                        }
+                                    }
+                                },
+                                "example":{
+                                    "message": "Profile",
+                                    "user": {
+                                        "cart": {
+                                            "items": []
+                                        },
+                                        "_id": "5fbad850b3d3f3cc049ddb69",
+                                        "name": "string",
+                                        "email": "string",
+                                        "password": "$2a$12$.GVtxSR2PBqRx2hDb5E9oO9zdDAq2wZ5zr0clzHC.dMLTwpegfucG",
+                                        "isAdmin": false,
+                                        "__v": 0
+                                    }
+                                  }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Error: Unauthorized",
+                        "content" : {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/definitions/MessageResponse"
+                                },
+                                "example": {
+                                    "message": "Not authenticated."
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+
         "/products": {
             "get": {
                 "tags": ["Products"],
@@ -29,20 +221,14 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "type": "array",
-                                    "items": {
-                                        "$ref": "#/definitions/Product"
+                                    "properties": {
+                                        "products": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/Product"
+                                            }
+                                        }
                                     }
-                                }
-                            }
-                        }
-                    },
-                    "500": {
-                        "description": "Unexpected error",
-                        "content" : {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/definitions/MessageResponse"
                                 }
                             }
                         }
@@ -51,6 +237,11 @@
             },
             "post": {
                 "tags": ["Products"],
+                "security": [
+                    {
+                       "bearerAuth": []
+                    }
+                ],
                 "summary": "To add a new product",
                 "requestBody":{
                     "content": {
@@ -58,16 +249,27 @@
                           "schema": {
                             "type": "object",
                             "properties": {
-                              "name": {
+                              "title": {
                                 "description": "Updated name of the pet",
                                 "type": "string"
                               },
-                              "status": {
+                              "price": {
                                 "description": "Updated status of the pet",
-                                "type": "string"
+                                "type": "number"
+                              },
+                              "imageUrl": {
+                                  "type": "string"
+                              },
+                              "description": {
+                                  "type": "string"
+                              },
+                              "categories": {
+                                  "type": "array",
+                                  "items": {
+                                      "type": "string"
+                                  }
                               }
-                            },
-                            "required": ["status"]
+                            }
                           }
                         }
                       }
@@ -79,27 +281,491 @@
                             "application/json": {
                                 "schema": {
                                     "$ref": "#/definitions/MessageResponse"
+                                },
+                                "example":{
+                                    "message": "Product created."
                                 }
                             }
                         }
                     },
-                    "500": {
-                        "description": "Unexpected error",
+                    "401": {
+                        "description": "Error: Unauthorized",
                         "content" : {
                             "application/json": {
                                 "schema": {
                                     "$ref": "#/definitions/MessageResponse"
+                                },
+                                "example": {
+                                    "message": "Not authenticated."
                                 }
                             }
                         }
                     }
                 }
             }
+        },
+
+        "/product/{productId}":{
+            "get": {
+                "tags": ["Products"],
+                "summary": "To fetch details of a single product",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "productId",
+                        "schema":{
+                            "type": "string"
+                        },
+                        "required": true,
+                        "description": "Product id"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success message",
+                        "content": {
+                            "application/josn": {
+                                "schema": {
+                                    "$ref": "#/definitions/Product"
+                                },
+                                "example": {
+                                    "message": "Product found.",
+                                    "product": {
+                                      "rating": {
+                                        "current": 0.75,
+                                        "numOfRatings": 1
+                                      },
+                                      "categories": [],
+                                      "_id": "5fb844379e69f4535a24b66a",
+                                      "title": "Ipod",
+                                      "price": 34000,
+                                      "imageUrl": "https://miro.medium.com/max/700/0*AfqBDiTV_BNa_sP7.png",
+                                      "description": "We are apple!",
+                                      "__v": 1
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+
+        "/categories": {
+            "get": {
+                "tags": ["Category"],
+                "summary": "To list details of all categories",
+                "responses": {
+                    "200":{
+                        "description": "Succcess Message",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "categories": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/Category"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+
+            "post": {
+                "tags": ["Category"],
+                "summary": "To add a new category",
+                "security": [
+                    {
+                       "bearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "title":{
+                                        "type": "string"
+                                    },
+                                    "description": {
+                                        "type": "string"
+                                    },
+                                    "isPrimary": {
+                                        "type": "boolean"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201":{
+                        "description": "Succcess Message",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "categories": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/Category"
+                                            }
+                                        }
+                                    }
+                                },
+                                "example": {
+                                    "message": "Category created."
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+
+        "/category/{categoryId}": {
+           "get":{
+                "tags": ["Category"],
+                "summary": "To fetch details of a single category",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "categoryId",
+                        "schema":{
+                            "type": "string"
+                        },
+                        "required": true,
+                        "description": "Category id"
+                    }
+                ],
+                "responses": {
+                    "201":{
+                        "description": "Succcess Message",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        },
+                                        "category": {
+                                            "$ref": "#/definitions/Category"
+                                        }
+                                    }
+                                },
+                                "example": {
+                                    "message": "Category found.",
+                                    "category": {
+                                      "_id": "5fb85d100ae61174840f4585",
+                                      "title": "Desgin",
+                                      "description": "This is a category 2",
+                                      "isPrimary": false,
+                                      "__v": 0
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404":{
+                        "description": "Not found Message",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    }
+                                },
+                                "example": {
+                                    "message": "Could not find category."
+                                }
+                            }
+                        }
+                    }
+                }
+
+           }
+
+        },
+
+        "/listByCategory/{categoryId}": {
+            "get":{
+                "tags": ["Category", "Product"],
+                "summary": "To fetch details of products based on category id",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "categoryId",
+                        "schema":{
+                            "type": "string"
+                        },
+                        "required": true,
+                        "description": "Category id"
+                    }
+                ],
+                "responses": {
+                    "201":{
+                        "description": "Succcess Message",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        },
+                                        "category": {
+                                            "$ref": "#/definitions/Product"
+                                        }
+                                    }
+                                },
+                                "example": {
+                                    "message": "Products by category ",
+                                    "products": [
+                                      {
+                                        "rating": {
+                                          "current": 0,
+                                          "numOfRatings": 0
+                                        },
+                                        "categories": [
+                                          "5fb856218a56c26aa6f71166"
+                                        ],
+                                        "_id": "5fb85c17be598973f114ebba",
+                                        "title": "Ipod33 wiht category",
+                                        "price": 3400011,
+                                        "imageUrl": "https://miro.medium.com/max/700/0*AfqBDiTV_BNa_sP7.png",
+                                        "description": "We are apple!2",
+                                        "__v": 0
+                                      },
+                                      {
+                                        "rating": {
+                                          "current": 0,
+                                          "numOfRatings": 0
+                                        },
+                                        "categories": [
+                                          "5fb856218a56c26aa6f71166",
+                                          "5fb85d100ae61174840f4585"
+                                        ],
+                                        "_id": "5fb85d5ea1e88a7533921cfb",
+                                        "title": "PRoduct with 2 category",
+                                        "price": 3400011,
+                                        "imageUrl": "https://miro.medium.com/max/700/0*AfqBDiTV_BNa_sP7.png",
+                                        "description": "We are apple!2",
+                                        "__v": 0
+                                      }
+                                    ]
+                                  }
+                            }
+                        }
+                    },
+                    "404":{
+                        "description": "Not found Message",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    }
+                                },
+                                "example": {
+                                    "message": "Could not find category."
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+
+        "/rating/{productId}":{
+            "get": {
+                "tags": ["Rating"],
+                "summary": "To fetch ratings for a product",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "productId",
+                        "schema":{
+                            "type": "string"
+                        },
+                        "required": true,
+                        "description": "Product id"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success Message",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        },
+                                        "user": {
+                                            "type": "object"
+                                        }
+                                    }
+                                },
+                                "example":{
+                                    "message": "Ratings -- ",
+                                    "ratings": [
+                                      {
+                                        "rating": 2,
+                                        "_id": "5fb86f62ff813791d6f0b397",
+                                        "product": {
+                                          "rating": {
+                                            "current": 1.5,
+                                            "numOfRatings": 2
+                                          },
+                                          "categories": [
+                                            "5fb856218a56c26aa6f71166"
+                                          ],
+                                          "_id": "5fb86e9ea4c54490a37e3f86",
+                                          "title": "For rating",
+                                          "price": 3400011,
+                                          "imageUrl": "https://miro.medium.com/max/700/0*AfqBDiTV_BNa_sP7.png",
+                                          "description": "We are apple!2",
+                                          "__v": 0
+                                        },
+                                        "user": {
+                                          "cart": {
+                                            "items": []
+                                          },
+                                          "_id": "5fb84b4bce9a315b36cb5d28",
+                                          "name": "testuser",
+                                          "email": "testuser@gmail.com",
+                                          "password": "$2a$12$0bCKojfbFc7h8XggTwe3SeP32TWzyWN3RTqgwjSBF.La251vZ3LYW",
+                                          "isAdmin": false,
+                                          "__v": 0
+                                        },
+                                        "__v": 0
+                                      },
+                                      {
+                                        "rating": 3,
+                                        "_id": "5fb86fbe02aad2923111cfd9",
+                                        "product": {
+                                          "rating": {
+                                            "current": 1.5,
+                                            "numOfRatings": 2
+                                          },
+                                          "categories": [
+                                            "5fb856218a56c26aa6f71166"
+                                          ],
+                                          "_id": "5fb86e9ea4c54490a37e3f86",
+                                          "title": "For rating",
+                                          "price": 3400011,
+                                          "imageUrl": "https://miro.medium.com/max/700/0*AfqBDiTV_BNa_sP7.png",
+                                          "description": "We are apple!2",
+                                          "__v": 0
+                                        },
+                                        "user": {
+                                          "cart": {
+                                            "items": []
+                                          },
+                                          "_id": "5fb84b4bce9a315b36cb5d28",
+                                          "name": "testuser",
+                                          "email": "testuser@gmail.com",
+                                          "password": "$2a$12$0bCKojfbFc7h8XggTwe3SeP32TWzyWN3RTqgwjSBF.La251vZ3LYW",
+                                          "isAdmin": false,
+                                          "__v": 0
+                                        },
+                                        "__v": 0
+                                      }
+                                    ]
+                                  }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": ["Rating"],
+                "summary": "To rate a product",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "productId",
+                        "schema":{
+                            "type": "string"
+                        },
+                        "required": true,
+                        "description": "Product id"
+                    }
+                ],
+                "security": [
+                    {
+                       "bearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "rating":{
+                                        "type": "number",
+                                        "maximum": 3,
+                                        "minimum": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Success Message",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    }
+                                },
+                                "example":{
+                                    "message": "Rating added"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Error: Unauthorized",
+                        "content" : {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/definitions/MessageResponse"
+                                },
+                                "example": {
+                                    "message": "Not authenticated."
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
         }
+
     },
+
+
     "definitions": {
         "Product": {
             "properties": {
+                "_id": {
+                    "type": "string",
+                    "description": "id "
+                },
                 "title": {
                     "type": "string",
                     "description": "title"
@@ -127,6 +793,10 @@
         },
         "Category": {
             "properties": {
+                "_id": {
+                    "type": "ObjectId",
+                    "description": "Id for category"
+                },
                 "title": {
                     "type": "string",
                     "description": "Title for category"
@@ -148,6 +818,40 @@
                     "description": "Error description"
                 }
             }
+        },
+        "UserModel": {
+            "properties": {
+                "cart": {
+                    "type": "array",
+                    "items": {
+                        "type": []
+                    }
+                },
+                "_id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "isAdmin": {
+                    "type": "booolean"
+                }
+            }
         }
-    }
+    },
+    "components": {        
+        "securitySchemes": {
+          "bearerAuth": {
+            "type": "http",
+            "scheme": "bearer",
+            "bearerFormat": "JWT"
+          }
+        }
+      }
 }
