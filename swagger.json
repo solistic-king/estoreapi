@@ -1,0 +1,152 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "version": "1.0.0",
+        "title": "EStore Api Documentation",
+        "description": "",
+        "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+        }
+    },
+    "servers": [
+        {
+            "url": "http://localhost:3000"
+        },
+        {
+            "url": "https://estore-backend.herokuapp.com/"
+        }
+    ],
+    "paths": {
+        "/products": {
+            "get": {
+                "tags": ["Products"],
+                "summary": "List of products",
+                "responses": {
+                    "200": {
+                        "description": "An array of products",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/definitions/Product"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Unexpected error",
+                        "content" : {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/definitions/MessageResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": ["Products"],
+                "summary": "To add a new product",
+                "requestBody":{
+                    "content": {
+                        "application/json": {
+                          "schema": {
+                            "type": "object",
+                            "properties": {
+                              "name": {
+                                "description": "Updated name of the pet",
+                                "type": "string"
+                              },
+                              "status": {
+                                "description": "Updated status of the pet",
+                                "type": "string"
+                              }
+                            },
+                            "required": ["status"]
+                          }
+                        }
+                      }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Success Message",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/definitions/MessageResponse"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Unexpected error",
+                        "content" : {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/definitions/MessageResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "Product": {
+            "properties": {
+                "title": {
+                    "type": "string",
+                    "description": "title"
+                },
+                "price": {
+                    "type": "number",
+                    "description": "Price of product."
+                },
+                "imageUrl": {
+                    "type": "string",
+                    "description": "Display image of product."
+                },
+                "description": {
+                    "type": "string",
+                    "description": "Description of product"
+                },
+                "categories": {
+                    "type": "array",
+                    "description": "",
+                    "items": {
+                        "$ref": "#/definitions/Category"
+                    }
+                }
+            }
+        },
+        "Category": {
+            "properties": {
+                "title": {
+                    "type": "string",
+                    "description": "Title for category"
+                },
+                "description": {
+                    "type": "string",
+                    "description": "Description about category"
+                },
+                "isPrimary": {
+                    "type": "boolean",
+                    "description": "Is a primary category or not"
+                }
+            }
+        },
+        "MessageResponse": {
+            "properties" : {
+                "message": {
+                    "type": "string",
+                    "description": "Error description"
+                }
+            }
+        }
+    }
+}

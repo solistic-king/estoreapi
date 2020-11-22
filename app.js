@@ -4,7 +4,9 @@ const expressWinston = require('express-winston');
 const winston = require('winston');
 const mongoose = require('mongoose');
 const cors = require('cors');
-const bodyParser = require('body-parser');  
+const bodyParser = require('body-parser');
+const swaggerUi = require('swagger-ui-express'),
+swaggerDocument = require('./swagger.json');
 
 const authRoutes = require('./routes/auth');
 const shopRoutes = require('./routes/shop');
@@ -17,6 +19,8 @@ app.use(bodyParser.json());
 
 app.use(cors());
 
+app.use('/api', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+
 app.use(expressWinston.logger({
     transports: [
       new winston.transports.Console()
@@ -27,10 +31,10 @@ app.use(expressWinston.logger({
     )
   }));
 
-app.use('/auth', authRoutes);
-app.use('', shopRoutes);
-app.use('', categoryRoutes);
-app.use('', ratingRoutes);
+app.use('/api', authRoutes);
+app.use('/api', shopRoutes);
+app.use('/api', categoryRoutes);
+app.use('/api', ratingRoutes);
 
 app.use(expressWinston.errorLogger({
     transports: [
